@@ -11,6 +11,16 @@ parser = ConfigParser()
 parser.read('sc.conf')
 
 
+def byteify(input):
+    if isinstance(input, dict):
+        return {byteify(key):byteify(value) for key,value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
+
 def connect(module, action, input={}):
 	data = {'module': module,
 			'action': action,
@@ -57,24 +67,33 @@ input = {'tool': 'vulndetails',
          'endOffset': 2}
 vulns = connect('vuln', 'query', input)
 
-#print vulns
+results_json = vulns['results']
 
-x = json.dumps(vulns,skipkeys=True)
-print x
-''''
+#x = json.dumps(results_json)
+
+z = byteify(results_json)
+
+header=[]
+for doc in z:
+		for key, value in doc.iteritems():
+			header.append(key)
+print header
+
+
 f = csv.writer(open("test.csv", "wb+"))
 
 # Write CSV Header, If you dont need that, remove this line
-f.writerow(["ip", "port", "severity", "pluginID", "pluginName"])
+f.writerow(header)
 
 for x in x :
-    f.writerow([x["ip"], 
-                x["port"], 
-                x["severity"], 
-                x["pluginID"],
-                x["pluginName"]])
+    f.writerow([x["0"], 
+                x["1"], 
+                x["2"], 
+                x["3"],
+                x["4"]])
 
-'''
+
+
 '''
 for vuln in vulns['results']:
     print 'IP: ' + vuln['ip']
