@@ -64,7 +64,7 @@ input = {'tool': 'vulndetails',
          'sourceType': 'cumulative',
          'filters': filters,
          'startOffset': 0,
-         'endOffset': 2}
+         'endOffset': 20}
 vulns = connect('vuln', 'query', input)
 
 results_json = vulns['results']
@@ -72,32 +72,36 @@ results_json = vulns['results']
 #x = json.dumps(results_json)
 
 z = byteify(results_json)
+# print z
 
 header=[]
+g=0
 for doc in z:
+	while g < 1 :
 		for key, value in doc.iteritems():
 			header.append(key)
-print header
+		g +=1	
+
 
 
 f = csv.writer(open("test.csv", "wb+"))
-
+print header
 # Write CSV Header, If you dont need that, remove this line
 f.writerow(header)
 
-for x in x :
-    f.writerow([x["0"], 
-                x["1"], 
-                x["2"], 
-                x["3"],
-                x["4"]])
+header_c = len(header)
+a=0
+c=[]
+for z in z :
+	a = 0
+	c = []
+	while a < header_c :
+		c +=  [z[header[a]]]
+		a +=1
+	f.writerow(c)
+	
+	
 
 
 
-'''
-for vuln in vulns['results']:
-    print 'IP: ' + vuln['ip']
-    print 'Name: ' + vuln['pluginName']
-    print 'Severity: ' + vuln['severity']
-    print
-'''
+
