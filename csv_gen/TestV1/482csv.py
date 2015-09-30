@@ -59,7 +59,7 @@ cookie = resp['sessionID']
 
 filters = [{'filterName': 'repositoryIDs',
             'operator': '=',
-            'value': '17'}]
+            'value': 'parser.get('core', 'screpositoryIDs')'}]
 input = {'tool': 'vulndetails',
          'sourceType': 'cumulative',
          'filters': filters,
@@ -96,7 +96,7 @@ for z in z :
 	a = 0
 	c = []
 	while a < header_c :
-		c +=  [z[header[a]]]
+		c += ['"'+z[header[a]]+'"']
 		a +=1
 	f.writerow(c)
 	
